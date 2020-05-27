@@ -24,7 +24,7 @@ class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
   final String title;
-  String username = "Flutter";
+  String username;
   bool alreadySubmitted = false;
 
   @override
@@ -45,11 +45,17 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _onTextChanged(String text) {
+    setState(() {
+      widget.username = text.trim();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
     final String welcome = !widget.alreadySubmitted ?
-    "Welcome to ${widget.username}!" :
+    "Welcome to Flutter!":
     "Hello ${widget.username}!";
 
     return Scaffold(
@@ -69,9 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
             if (!widget.alreadySubmitted) Container(
               padding: EdgeInsets.only(top: 24.0, left: 36.0, right: 36.0, bottom: 24.0),
               child: TextField(
-                onChanged: (text) {
-                  widget.username = text;
-                },
+                onChanged: (text) => _onTextChanged(text),
                 decoration: InputDecoration(
                     hintText: 'Please enter your name'
                 ),
@@ -80,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
             if (!widget.alreadySubmitted) RaisedButton(
               color: Colors.blue,
               textColor: Colors.white,
-              onPressed: _submitUsername,
+              onPressed: widget.username != null && widget.username.isNotEmpty ? _submitUsername : null,
               child: Text("Submit"),
             )
           ],
